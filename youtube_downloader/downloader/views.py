@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from pytube import YouTube
+import os
 
 # Create your views here.
 def index(request):
@@ -14,14 +15,22 @@ def mp3_download(request):
             try:
                 youtube_object = YouTube(link)
                 audio_stream = youtube_object.streams.filter(only_audio=True).first()
+                
                 audio_file_path = audio_stream.download()
+                 
+                video_title = youtube_object.title
+                             
                 with open(audio_file_path, 'rb') as file:
-                    response = HttpResponse(file.read(), content_type='audio/mpeg')
-                    response['Content-Disposition'] = 'attachment; filename="audio.mp3"'
+                    audio_content = file.read()
+                     
+                os.remove(audio_file_path)
+                
+                response = HttpResponse(audio_content, content_type='audio/mpeg')
+    
+                response['Content-Disposition'] = f'attachment; filename="{video_title}.mp3"'
                 return response
             except Exception as e:
-                print(f"An error has occurred: {e}")
-                return HttpResponse(f"An error has occurred: {e}", status=500)
+                return HttpResponse(f"An error occurred: {e}", status=500)
         else: 
             return HttpResponse("No link provided", status=400)
     else:
