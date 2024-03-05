@@ -37,7 +37,32 @@ def mp3_download(request):
         return HttpResponse("Method not allowed", status=405)
     
 def mp4_download(request):
-    pass
+    if request.method == 'GET':
+        link = request.GET.get('link')
+        if link:
+
+            try:
+                youtube_object = YouTube(link)
+                video_stream = youtube_object.streams.filter(resolution='720p', file_extension='mp4').first()
+                video_file_path = video_stream.download()
+                video_title = youtube_object.title
+
+                with open(video_file_path, 'rb') as file:
+                    video_content = file.read()
+                     
+                os.remove(video_file_path)
+                
+                response = HttpResponse(video_content, content_type='video/mp4')
+    
+                response['Content-Disposition'] = f'attachment; filename="{video_title}.mp4"'
+                return response
+            except Exception as e:
+                return HttpResponse(f"An error occurred: {e}", status=500)
+        else: 
+            return HttpResponse("No link provided", status=400)
+    else:
+        return HttpResponse("Method not allowed", status=405)
+
 
 def playlist_download(request):
     pass
