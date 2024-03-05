@@ -6,12 +6,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'downloader/styles.css' %}">
-    <title>Document</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/99cd413302.js" crossorigin="anonymous"></script>
+    <title>PyTube Downloader</title>
 </head>
 <body>
-    <h1>Youtube Downloader</h1>
-    <form action="{% url 'mp3' %}" method="get" id="link-form">
-        <input autofocus type="text" name="link" placeholder="Enter YouTube video link">
+    <h1>Pytube Downloader</h1>
+    <p>What do you want to download?</p>
+    <button class="btn btn-sm btn-outline-dark" id="mp3-btn"><i class="fa-regular fa-file-audio"></i> MP3</button>
+    <button class="btn btn-sm btn-outline-dark" id="mp4-btn"><i class="fa-regular fa-file-video"></i> MP4</button>
+    <button class="btn btn-sm btn-outline-dark" id="playlist-btn"><i class="fa-solid fa-list"></i> Playlist</button>
+    <button class="btn btn-sm btn-outline-dark" id="channel-btn"><i class="fa-brands fa-youtube"></i></i> Channel</button>
+    <br>
+    <br>
+    <form action="{% url 'mp3' %}" method="get" id="mp3">
+        <input autofocus type="text" name="link" placeholder="Enter YouTube the video link to download mp3">
     </form>
+    <form action="{% url 'mp4' %}" method="get" id="mp4">
+        <input autofocus type="text" name="link" placeholder="Enter YouTube the video link to download mp4">
+    </form>
+    <form action="{% url 'playlist' %}" method="get" id="playlist">
+        <input autofocus type="text" name="link" placeholder="Enter YouTube playlist link to download">
+    </form>
+    <form action="{% url 'channel' %}" method="get" id="channel">
+        <input autofocus type="text" name="link" placeholder="Enter YouTube channel link to download">
+    </form>
+
+    {% block script %}
+    <script src="{% static 'downloader/logic.js' %}"></script>
+    {% endblock %}
+
 </body>
 </html>

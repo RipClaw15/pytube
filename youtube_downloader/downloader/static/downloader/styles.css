@@ -7,14 +7,13 @@ h1 {
     font-size: 3em; 
 }
 
-#link-form {
-    width: 550px;
-    height: 450px;
-    margin: auto;
-    position: relative;
-   }
+
 
    input {
     width: 375px;
     height: 25px;
    }
+
+#mp4, #playlist, #channel{
+    display: none;
+}

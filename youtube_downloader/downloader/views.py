@@ -36,5 +36,11 @@ def mp3_download(request):
     else:
         return HttpResponse("Method not allowed", status=405)
     
-def video_download(request):
+def mp4_download(request):
+    pass
+
+def playlist_download(request):
+    pass
+
+def channel_download(request):
     pass
