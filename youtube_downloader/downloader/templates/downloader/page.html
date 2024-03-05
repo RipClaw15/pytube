@@ -10,8 +10,8 @@
 </head>
 <body>
     <h1>Youtube Downloader</h1>
-    <form method="POST">
-        <input autofocus type="text" name="url" placeholder="Enter YouTube video link">
+    <form action="{% url 'mp3' %}" method="get" id="link-form">
+        <input autofocus type="text" name="link" placeholder="Enter YouTube video link">
     </form>
 </body>
 </html>
