@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'downloader/styles.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Youtube Downloader</h1>
+    <form method="POST">
+        <input autofocus type="text" name="url" placeholder="Enter YouTube video link">
+    </form>
+</body>
+</html>
