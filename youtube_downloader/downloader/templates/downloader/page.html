@@ -13,24 +13,50 @@
 </head>
 <body>
     <h1>Pytube Downloader</h1>
-    <p>What do you want to download?</p>
-    <button class="btn btn-sm btn-outline-dark" id="mp3-btn"><i class="fa-regular fa-file-audio"></i> MP3</button>
-    <button class="btn btn-sm btn-outline-dark" id="mp4-btn"><i class="fa-regular fa-file-video"></i> MP4</button>
-    <button class="btn btn-sm btn-outline-dark" id="playlist-btn"><i class="fa-solid fa-list"></i> Playlist</button>
-    <button class="btn btn-sm btn-outline-dark" id="channel-btn"><i class="fa-brands fa-youtube"></i></i> Channel</button>
+    <p>Download your favorite YouTube contents for free!</p>
+
+    <form>
+        <p>What do you want to download?</p>
+        <input type="radio" id="mp3-btn" name="media" value="mp3">
+        <label for="mp3-btn"><i class="fa-regular fa-file-audio"></i>Music</label><br>
+        <input type="radio" id="mp4-btn" name="media" value="mp4">
+        <label for="mp4-btn"><i class="fa-regular fa-file-video"></i>Video</label><br> 
+        <br>  
+
+        <p>Is your link a:</p>
+        <input type="radio" id="single-btn" name="size" value="single">
+        <label for="single-btn">Single</label><br>
+        <input type="radio" id="playlist-btn" name="size" value="playlist">
+        <label for="playlist-btn">Playlist</label><br>  
+        <input type="radio" id="channel-btn" name="size" value="channel">
+        <label for="channel-btn">Channel</label><br>  
+    </form>
+
     <br>
     <br>
-    <form action="{% url 'mp3' %}" method="get" id="mp3">
-        <input autofocus type="text" name="link" placeholder="Enter YouTube the video link to download mp3">
+    <form action="{% url 'media' %}" method="get" id="mp3-form" class="hidden">
+        <input type="hidden" name="media_type" value="audio">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube video link to download a music">
     </form>
-    <form action="{% url 'mp4' %}" method="get" id="mp4">
-        <input autofocus type="text" name="link" placeholder="Enter YouTube the video link to download mp4">
+    <form action="{% url 'media' %}" method="get" id="mp4-form" class="hidden">
+        <input type="hidden" name="media_type" value="video">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube video link to download a video">
     </form>
-    <form action="{% url 'playlist' %}" method="get" id="playlist">
-        <input autofocus type="text" name="link" placeholder="Enter YouTube playlist link to download">
+    <form action="{% url 'playlist' %}" method="get" id="playlist-mp3-form" class="hidden">
+        <input type="hidden" name="media_type" value="audio">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube playlist link to download as music playlist">
     </form>
-    <form action="{% url 'channel' %}" method="get" id="channel">
-        <input autofocus type="text" name="link" placeholder="Enter YouTube channel link to download">
+    <form action="{% url 'playlist' %}" method="get" id="playlist-mp4-form" class="hidden">
+        <input type="hidden" name="media_type" value="video">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube playlist link to download as video playlist">
+    </form>
+    <form action="{% url 'channel' %}" method="get" id="channel-mp3-form" class="hidden">
+        <input type="hidden" name="media_type" value="audio">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube channel link to download as music channel">
+    </form>
+    <form action="{% url 'channel' %}" method="get" id="channel-mp4-form" class="hidden">
+        <input type="hidden" name="media_type" value="video">
+        <input class="url" autofocus type="text" name="link" placeholder="Enter YouTube channel link to download as video channel">
     </form>
 
     {% block script %}

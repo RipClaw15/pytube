@@ -7,27 +7,36 @@ import os
 def index(request):
     return render(request, "downloader/page.html")
 
-def mp3_download(request):
+def download_media(request, media_type):
     if request.method == 'GET':
         link = request.GET.get('link')
         if link:
 
             try:
                 youtube_object = YouTube(link)
-                audio_stream = youtube_object.streams.filter(only_audio=True).first()
-                
-                audio_file_path = audio_stream.download()
-                 
-                video_title = youtube_object.title
-                             
-                with open(audio_file_path, 'rb') as file:
-                    audio_content = file.read()
+
+                if media_type == 'audio':
+
+                    audio_stream = youtube_object.streams.filter(only_audio=True).first()
+                    file_extension = 'mp3'
+                    content_type = 'audio/mpeg'
+                elif media_type == 'video':
+                    video_stream = youtube_object.streams.filter(resolution='720p', file_extension='mp4').first()
+                    file_extension = 'mp4'
+                    content_type = 'video/mp4'
+                else:
+                    raise ValueError("Invalid media type")
+
+                file_path = audio_stream.download() if media_type == 'audio' else video_stream.download()
+                       
+                with open(file_path, 'rb') as file:
+                    media_content = file.read()
                      
-                os.remove(audio_file_path)
+                os.remove(file_path)
                 
-                response = HttpResponse(audio_content, content_type='audio/mpeg')
+                response = HttpResponse(media_content, content_type=content_type)
     
-                response['Content-Disposition'] = f'attachment; filename="{video_title}.mp3"'
+                response['Content-Disposition'] = f'attachment; filename="{youtube_object.title}.{file_extension}"'
                 return response
             except Exception as e:
                 return HttpResponse(f"An error occurred: {e}", status=500)
@@ -36,32 +45,6 @@ def mp3_download(request):
     else:
         return HttpResponse("Method not allowed", status=405)
     
-def mp4_download(request):
-    if request.method == 'GET':
-        link = request.GET.get('link')
-        if link:
-
-            try:
-                youtube_object = YouTube(link)
-                video_stream = youtube_object.streams.filter(resolution='720p', file_extension='mp4').first()
-                video_file_path = video_stream.download()
-                video_title = youtube_object.title
-
-                with open(video_file_path, 'rb') as file:
-                    video_content = file.read()
-                     
-                os.remove(video_file_path)
-                
-                response = HttpResponse(video_content, content_type='video/mp4')
-    
-                response['Content-Disposition'] = f'attachment; filename="{video_title}.mp4"'
-                return response
-            except Exception as e:
-                return HttpResponse(f"An error occurred: {e}", status=500)
-        else: 
-            return HttpResponse("No link provided", status=400)
-    else:
-        return HttpResponse("Method not allowed", status=405)
 
 
 def playlist_download(request):

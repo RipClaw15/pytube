@@ -1,19 +1,13 @@
 body {
     text-align:center;
-    
+    font-size: 2em; 
 }
 
-h1 {
-    font-size: 3em; 
-}
-
-
-
-   input {
+   .url {
     width: 375px;
     height: 25px;
    }
 
-#mp4, #playlist, #channel{
+   .hidden {
     display: none;
 }
