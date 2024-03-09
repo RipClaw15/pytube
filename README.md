@@ -39,3 +39,42 @@ For any questions or assistance related to the project, feel free to open an iss
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
+def playlist_download(request, media_type):
+    if request.method == 'GET':
+        link = request.GET.get('link')
+        if link:
+
+            try:
+                p = Playlist(link)
+                if media_type == 'audio':
+                    audio_streams = []
+                    for video in p.videos:
+                        audio_stream = video.streams.filter(only_audio=True).first()
+                        audio_streams.append(audio_stream)
+                    
+                    # Download and concatenate audio streams
+                    audio_content = b''
+                    for audio_stream in audio_streams:
+                        audio_content += audio_stream.stream_to_buffer()
+
+                    response = HttpResponse(content=audio_content, content_type='audio/mpeg')
+                    response['Content-Disposition'] = 'attachment; filename="playlist_audio.mp3"'
+                    
+                elif media_type == 'video':
+                    video_stream = p.videos[0].streams.filter(resolution='720p', file_extension='mp4').first()
+                    video_content = video_stream.stream_to_buffer()
+
+                    response = HttpResponse(content=video_content, content_type='video/mp4')
+                    response['Content-Disposition'] = 'attachment; filename="playlist_video.mp4"'
+
+                else:
+                    raise ValueError("Invalid media type")
+
+                return response
+            except Exception as e:
+                return HttpResponse(f"An error occurred: {e}", status=500)
+                
+        else: 
+            return HttpResponse("No link provided", status=400)
+    else:
+        return HttpResponse("Method not allowed", status=405)
